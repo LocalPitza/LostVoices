@@ -8,8 +8,10 @@ public class NormalDoorScript : Interactable
 {
     public GameObject Door;
     public bool isOpen;
-    public GameObject UI;
+    public bool moveSnap;
+    public float moveSpeed;
     private string _text = "Open Door";
+    public AudioSource _audio;
     [SerializeField] private Vector3 start;
     [SerializeField] private Vector3 end;
 
@@ -21,12 +23,14 @@ public class NormalDoorScript : Interactable
     public override void OnInteract()
     {
         if(!isOpen){
-            Door.transform.DOMove(end,1f,false);
+            _audio.Play();
+            Door.transform.DOMove(end,moveSpeed,moveSnap);
             isOpen = true;
             _text = "Close Door";
         }
         else{
-            Door.transform.DOMove(start,1f,false);
+            _audio.Play();
+            Door.transform.DOMove(start,moveSpeed,moveSnap);
             isOpen = false;
             _text = "Open Door";
         }

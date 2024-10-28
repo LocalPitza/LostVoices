@@ -3,44 +3,42 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class UIInteract : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI interactText;
-    [SerializeField] private GameObject holder;
-
-    #region Instance
-
-    public static  UIInteract Instance { get; private set; }
+    public static UIInteract Instance;
+    public TextMeshProUGUI interactText;
+    public float fadeSpeed;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
-    }
-
-    #endregion
-
-    private void ChangeText(string text)
-    {
-        Instance.interactText.text = text;
+        
+        canvasGroup = interactText.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = interactText.gameObject.AddComponent<CanvasGroup>();
+        }
+        canvasGroup.alpha = 0;
     }
 
     public void ShowText(string text)
     {
-        ChangeText(text);
-        Instance.holder.SetActive(true);
+        interactText.text = text;
+        canvasGroup.DOFade(1, fadeSpeed);
     }
 
     public void HideText()
     {
-        Instance.holder.SetActive(false);
+        canvasGroup.DOFade(0, fadeSpeed);
     }
 }
