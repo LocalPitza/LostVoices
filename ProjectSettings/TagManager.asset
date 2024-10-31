@@ -8,6 +8,8 @@ TagManager:
   - Footstep/STONE
   - Footstep/TILE
   - Footstep/METAL
+  - Lights/HUB
+  - Dialogue
   layers:
   - Default
   - TransparentFX

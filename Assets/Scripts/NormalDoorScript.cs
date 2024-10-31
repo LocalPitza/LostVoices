@@ -8,31 +8,48 @@ public class NormalDoorScript : Interactable
 {
     public GameObject Door;
     public bool isOpen;
+    public bool useOnce;
     public bool moveSnap;
     public float moveSpeed;
-    private string _text = "Open Door";
+    [SerializeField] private string _text = "Interact";
     public AudioSource _audio;
     [SerializeField] private Vector3 start;
     [SerializeField] private Vector3 end;
-
+    [SerializeField] private bool hasBeenUsed = false;
     public override void OnFocus()
     {
-        UIInteract.Instance.ShowText(_text);
+        if(!isOpen && !useOnce){
+            UIInteract.Instance.ShowText(_text);
+        }
+        if(!isOpen && useOnce){
+            UIInteract.Instance.ShowText(_text);
+        }
+        if(isOpen && useOnce){
+            UIInteract.Instance.ShowText("Door is Open");
+        }
+
     }
 
     public override void OnInteract()
     {
-        if(!isOpen){
+        if (useOnce && hasBeenUsed)
+            return;
+
+        if (!isOpen)
+        {
             _audio.Play();
-            Door.transform.DOMove(end,moveSpeed,moveSnap);
+            Door.transform.DOMove(end, moveSpeed, moveSnap);
             isOpen = true;
-            _text = "Close Door";
         }
-        else{
+        else
+        {
             _audio.Play();
-            Door.transform.DOMove(start,moveSpeed,moveSnap);
+            Door.transform.DOMove(start, moveSpeed, moveSnap);
             isOpen = false;
-            _text = "Open Door";
+        }
+        if (useOnce)
+        {
+            hasBeenUsed = true;
         }
     }
 
@@ -40,5 +57,5 @@ public class NormalDoorScript : Interactable
     {
         UIInteract.Instance.HideText();
     }
-
+    
 }

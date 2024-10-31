@@ -113,11 +113,17 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
+        MouseLook();
+
+        if (canInteract)
+        {
+            HandleInteractionCheck();
+            HandleInteractionInput();
+        }
+
         if (CanMove)
         {
             MovementInput();
-
-            MouseLook();
 
             ApplyMovement();
 
@@ -135,13 +141,6 @@ public class FirstPersonController : MonoBehaviour
 
             if (useStamina)
                 HandleStamina();
-
-            if (canInteract)
-            {
-                HandleInteractionCheck();
-                HandleInteractionInput();
-            }
-
         }
     }
 
