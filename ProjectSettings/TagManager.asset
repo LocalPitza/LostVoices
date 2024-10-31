@@ -10,6 +10,7 @@ TagManager:
   - Footstep/METAL
   - Lights/HUB
   - Dialogue
+  - Enemy
   layers:
   - Default
   - TransparentFX
