@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.UI;
-
-public class startGame : MonoBehaviour
+using DG.Tweening;
+public class StartGame : MonoBehaviour
 {
     public CanvasGroup canvasFade;
 

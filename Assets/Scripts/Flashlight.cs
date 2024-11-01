@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Flashlight : MonoBehaviour
 {
     [SerializeField] GameObject flashlightLight;
     private bool LightIsOn = false;
+    public bool canTurnLightOn = true;
 
     void Start()
     {
@@ -18,7 +18,7 @@ public class Flashlight : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             FindObjectOfType<SoundManager>().Play("Switch");
-            if (LightIsOn == false)
+            if (LightIsOn == false && canTurnLightOn)
             {
                 flashlightLight.gameObject.SetActive(true);
                 LightIsOn = true;

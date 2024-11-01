@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class randomSFX : MonoBehaviour
+public class RandomSFX : MonoBehaviour
 {
     public AudioSource audioSource; // Reference to an AudioSource component
     public AudioClip[] soundEffects; // Array of sound effects to randomly choose from

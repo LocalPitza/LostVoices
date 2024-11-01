@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour
 {
-private Dictionary<string, int> items = new Dictionary<string, int>();
+    private Dictionary<string, int> items = new Dictionary<string, int>();
 
     // Adds an item to the inventory by ID
     public void AddItem(string itemID)

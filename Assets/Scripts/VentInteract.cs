@@ -6,16 +6,16 @@ using DG.Tweening;
 public class VentInteract : Interactable
 {
     public Vector3 teleportTarget;
-    public CanvasGroup fadeCanvasGroup;
-    public float fadeDuration = 0.5f;
+    public float fadeDuration = 0.5f;  // Customizable fade duration for vent interactions
 
     [SerializeField] private Transform player;
-    [SerializeField] private bool isTeleporting = false;
+    private bool isTeleporting = false;
 
     private void Start()
     {
         StartCoroutine(AssignPlayer());
     }
+
     private IEnumerator AssignPlayer()
     {
         while (GameObject.FindGameObjectWithTag("Player") == null)
@@ -25,6 +25,7 @@ public class VentInteract : Interactable
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
+
     public override void OnFocus()
     {
         UIInteract.Instance.ShowText("Use Vent");
@@ -43,21 +44,30 @@ public class VentInteract : Interactable
         UIInteract.Instance.HideText();
     }
 
-    private void StartTeleportSequence(){
+    private void StartTeleportSequence()
+    {
         isTeleporting = true;
 
+        // Disable player movement and set FadeManager duration for the fade transition
         FirstPersonController.instance.CanMove = false;
+        FadeManager.Instance.SetFadeDuration(fadeDuration);
 
-        fadeCanvasGroup.DOFade(1, fadeDuration).OnComplete(() =>
-        {
-            TeleportPlayer();
-            fadeCanvasGroup.DOFade(0, fadeDuration).OnComplete(() =>
-            {
-                isTeleporting = false;
-                FirstPersonController.instance.CanMove = true;
-                Debug.Log("VentInteract: Teleport sequence completed.");
-            });
-        });
+        // Start fade-in, teleport, and then fade-out sequence
+        FadeManager.Instance.FadeIn();
+        FadeManager.Instance.StartCoroutine(TeleportAfterFade());
+    }
+
+    private IEnumerator TeleportAfterFade()
+    {
+        yield return new WaitForSeconds(fadeDuration);
+
+        TeleportPlayer();
+
+        yield return new WaitForSeconds(fadeDuration);
+        
+        FadeManager.Instance.FadeOut();
+        FirstPersonController.instance.CanMove = true;
+        isTeleporting = false;
     }
 
     private void TeleportPlayer()
@@ -69,14 +79,7 @@ public class VentInteract : Interactable
         }
 
         FindObjectOfType<SoundManager>().Play("Vent");
-        Debug.Log($"VentInteract: Teleporting player to {teleportTarget}");
-
-        player.DOMove(teleportTarget, 0.2f, true)
-            .OnComplete(() => Debug.Log("VentInteract: Player teleportation completed."))
-            .OnKill(() =>      
-            {
-            //Debug.LogWarning("VentInteract: Player teleportation interrupted.");
-            player.position = teleportTarget;
-            });
+        player.position = teleportTarget;
+        Debug.Log("VentInteract: Player teleported.");
     }
 }

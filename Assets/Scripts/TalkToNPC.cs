@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TalkToNPC : Interactable
+public class TalkToNpc : Interactable
 {
     [SerializeField] private DialogueEntry[] dialogueEntries;
     [SerializeField] private string _text = "Talk";
@@ -35,5 +35,4 @@ public class TalkToNPC : Interactable
     {
         UIInteract.Instance.HideText();
     }
-
 }

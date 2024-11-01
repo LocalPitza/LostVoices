@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
-
+using TMPro;
+using Unity.VisualScripting;
 public class UIInteract : MonoBehaviour
 {
     public static UIInteract Instance;
     public TextMeshProUGUI interactText;
     public float fadeSpeed;
     [SerializeField] private CanvasGroup canvasGroup;
+
+    private void Update()
+    {
+        canvasGroup.DOFade(0, fadeSpeed);
+    }
 
     private void Awake()
     {

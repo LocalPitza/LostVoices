@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+
 public class FirstPersonController : MonoBehaviour
 {
-
-
-
     public bool CanMove { get; set; } = true;
     private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
     private bool ShouldJump => Input.GetKeyDown(jumpKey) && CharacCtrl.isGrounded;
@@ -80,6 +78,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private AudioClip[] woodClips = default;
     [SerializeField] private AudioClip[] stoneClips = default;
     [SerializeField] private AudioClip[] tileClips = default;
+    [SerializeField] private AudioClip[] metalClips = default;
     [SerializeField] private float footstepTimer = 0;
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : IsSprinting ? baseStepSpeed * SprintStepMultiplier : baseStepSpeed;
 
@@ -264,6 +263,9 @@ public class FirstPersonController : MonoBehaviour
                         break;
                     case "Footstep/TILE":
                         footstepAudioSource.PlayOneShot(tileClips[Random.Range(0, tileClips.Length - 1)]);
+                        break;
+                    case "Footstep/METAL":
+                        footstepAudioSource.PlayOneShot(metalClips[Random.Range(0, metalClips.Length - 1)]);
                         break;
                     default:
                         break;

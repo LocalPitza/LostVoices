@@ -8,48 +8,66 @@ public class NormalDoorScript : Interactable
 {
     public GameObject Door;
     public bool isOpen;
-    public bool useOnce;
     public bool moveSnap;
     public float moveSpeed;
-    [SerializeField] private string _text = "Interact";
+    private string _text = "Interact";
     public AudioSource _audio;
     [SerializeField] private Vector3 start;
     [SerializeField] private Vector3 end;
-    [SerializeField] private bool hasBeenUsed = false;
+    public ParticleSystem[] openDoorEffects;
+
+    private void Start()
+    {
+        if (openDoorEffects != null)
+        {
+            foreach (var effect in openDoorEffects)
+            {
+                if (effect != null)
+                {
+                    effect.Stop();
+                }
+            }
+        }
+    }
+
     public override void OnFocus()
     {
-        if(!isOpen && !useOnce){
-            UIInteract.Instance.ShowText(_text);
-        }
-        if(!isOpen && useOnce){
-            UIInteract.Instance.ShowText(_text);
-        }
-        if(isOpen && useOnce){
-            UIInteract.Instance.ShowText("Door is Open");
-        }
-
+        UIInteract.Instance.ShowText(_text);
     }
 
     public override void OnInteract()
     {
-        if (useOnce && hasBeenUsed)
-            return;
-
         if (!isOpen)
         {
             _audio.Play();
             Door.transform.DOMove(end, moveSpeed, moveSnap);
             isOpen = true;
+            _text = "Interact";
+
+            foreach (var effect in openDoorEffects)
+            {
+                if (effect != null)
+                {
+                    effect.Play();
+                    StartCoroutine(StopEffectAfterDuration(effect));
+                }
+            }
         }
         else
         {
             _audio.Play();
             Door.transform.DOMove(start, moveSpeed, moveSnap);
             isOpen = false;
-        }
-        if (useOnce)
-        {
-            hasBeenUsed = true;
+            _text = "Interact";
+
+            foreach (var effect in openDoorEffects)
+            {
+                if (effect != null)
+                {
+                    effect.Play();
+                    StartCoroutine(StopEffectAfterDuration(effect));
+                }
+            }
         }
     }
 
@@ -57,5 +75,9 @@ public class NormalDoorScript : Interactable
     {
         UIInteract.Instance.HideText();
     }
-    
+    private IEnumerator StopEffectAfterDuration(ParticleSystem effect)
+    {
+        yield return new WaitForSeconds(effect.main.duration);
+        effect.Stop();
+    }
 }

@@ -9,7 +9,10 @@ public class MainMenu : MonoBehaviour
 {
     public CanvasGroup canvasFade;
     public CanvasGroup secondCanvasFade;
+    public AudioSource backgroundMusic1;
+    public AudioSource backgroundMusic2;
     public float fadeDuration = 1.5f;
+    public float waitTimeAfterFade = 1.0f;
 
     private void Start()
     {
@@ -24,10 +27,16 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator FadeAndSwitchScene()
     {
+
         secondCanvasFade.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
         canvasFade.DOFade(1, fadeDuration).SetEase(Ease.InOutQuad);
 
+        backgroundMusic1.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
+        backgroundMusic2.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
+
         yield return new WaitForSeconds(fadeDuration);
+
+        yield return new WaitForSeconds(waitTimeAfterFade);
 
         SceneManager.LoadScene("MainGame");
     }
@@ -36,6 +45,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Opened Settings");
     }
+
     public void exitGame()
     {
         Debug.Log("Terminated Game");

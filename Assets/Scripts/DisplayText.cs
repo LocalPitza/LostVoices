@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Analytics;
-
 public class DisplayText : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI DialogueText;
