@@ -11,6 +11,7 @@ TagManager:
   - Lights/HUB
   - Dialogue
   - Enemy
+  - NPC
   layers:
   - Default
   - TransparentFX

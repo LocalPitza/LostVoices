@@ -6,7 +6,13 @@ public class EventTrigger : MonoBehaviour
 {
     public List<GameObject> _triggers = new List<GameObject>();
     public List<GameObject> _turnOff = new List<GameObject>();
-    private bool triggerActive;
+    [SerializeField]private bool triggerActive = false;
+    private void OnTriggerEnter(Collider other) {
+        if(!triggerActive)
+        {
+                        ActivateEvent();
+        }
+    }
     public void ActivateEvent()
     {
         triggerActive = true;

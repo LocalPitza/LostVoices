@@ -1123,6 +1123,135 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118867875}
   m_CullTransparentMesh: 1
+--- !u!1 &1150299088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1150299090}
+  - component: {fileID: 1150299089}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1150299089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150299088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 604f9c78734380741b61e8942dbbf47b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Switch
+    clips: {fileID: 8300000, guid: 138965d91b0763f449eb7db6db79f134, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: DeepCharacterSpeak
+    clips: {fileID: 8300000, guid: 5586d7d7dd238df43b8270e1fb50441a, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: CharacterSpeak
+    clips: {fileID: 8300000, guid: 3ff471e3a4cf6954ba425b4b0e9d0544, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Speak1
+    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Speak2
+    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Speak3
+    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Speak4
+    clips: {fileID: 8300000, guid: 9838d0cfabe659b4ba90924a7f10138a, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Speak5
+    clips: {fileID: 8300000, guid: 846052df10e1cdb40adb9876e1dee1fa, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Vent
+    clips: {fileID: 8300000, guid: 8a1dc11e5504cd64ab90618429747530, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: LockerEnter
+    clips: {fileID: 8300000, guid: c7f39e501e53cf64d88b938954854c7c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: LockerExit
+    clips: {fileID: 8300000, guid: c7f39e501e53cf64d88b938954854c7c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Detect
+    clips: {fileID: 8300000, guid: 94a9111c215bd2d408d9dd148b47cf14, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BreathIn
+    clips: {fileID: 8300000, guid: a9e9179b4a771544dab4301abacc7ec9, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BreathOut
+    clips: {fileID: 8300000, guid: 49d798fa6a5430349a4aa4e09d88db6e, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+--- !u!4 &1150299090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150299088}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.55737, y: -14.870818, z: 47.254738}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235128846
 GameObject:
   m_ObjectHideFlags: 0
@@ -2471,105 +2600,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2091260547
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2091260549}
-  - component: {fileID: 2091260548}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2091260548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2091260547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 604f9c78734380741b61e8942dbbf47b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: Switch
-    clips: {fileID: 8300000, guid: 138965d91b0763f449eb7db6db79f134, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: DeepCharacterSpeak
-    clips: {fileID: 8300000, guid: 5586d7d7dd238df43b8270e1fb50441a, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: CharacterSpeak
-    clips: {fileID: 8300000, guid: 3ff471e3a4cf6954ba425b4b0e9d0544, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Speak1
-    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Speak2
-    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Speak3
-    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Speak4
-    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Speak5
-    clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
-    volume: 0.6
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
---- !u!4 &2091260549
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2091260547}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -52.55737, y: -14.870818, z: 47.254738}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1951728300}
-  - {fileID: 2091260549}
+  - {fileID: 1150299090}
   - {fileID: 2017858139}
   - {fileID: 609126520}
   - {fileID: 1235128850}

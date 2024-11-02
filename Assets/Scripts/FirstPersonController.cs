@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-
+using UnityEngine.UI;
 
 public class FirstPersonController : MonoBehaviour
 {
     public bool CanMove { get; set; } = true;
-    private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
+    public bool IsSprinting => canSprint && Input.GetKey(sprintKey);
+    public bool IsBreathing => canBreath && Input.GetKey(holdBreath);
     private bool ShouldJump => Input.GetKeyDown(jumpKey) && CharacCtrl.isGrounded;
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !inCrouchAnim && CharacCtrl.isGrounded;
 
@@ -17,14 +18,17 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canHeadBob = true;
     [SerializeField] private bool canInteract = true;
+    [SerializeField] private bool canBreath = true;
     [SerializeField] private bool useFootsteps = true;
     [SerializeField] private bool useStamina = true;
+    [SerializeField] private bool useOxygen = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.C;
     [SerializeField] private KeyCode interactKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode holdBreath = KeyCode.E;
 
     [Header("Movement Parameters")]
     [SerializeField] private float WalkSpeed = 3.0f;
@@ -60,6 +64,15 @@ public class FirstPersonController : MonoBehaviour
     private float currentStamina;
     private Coroutine regeneratingStamina;
 
+    [Header("HoldBreath")]
+    [SerializeField] private float maxOxygen = 100;
+    [SerializeField] private float oxygenDrain = 5;
+    [SerializeField] private float timeBeforeOxygenStart = 5;
+    [SerializeField] private float oxygenRegenValue = 2;
+    [SerializeField] private float oxygenRegenTime = 0.1f;
+    [SerializeField] private float currentOxygen;
+    private Coroutine regeneratingOxygen;
+
     [Header("Headbob Parameters")]
     [SerializeField] private float walkBobSpeed = 14f;
     [SerializeField] private float walkBobAmount = 0.05f;
@@ -82,6 +95,12 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float footstepTimer = 0;
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : IsSprinting ? baseStepSpeed * SprintStepMultiplier : baseStepSpeed;
 
+    [Header("Damage Overlay")]
+    [SerializeField] private Image damageScreen;
+    [SerializeField] private float fadeSpeed;
+    [SerializeField] private float duration;
+    [SerializeField] private float durationTimer;
+
     [Header("Interaction")]
     [SerializeField] private Vector3 interactionRayPoint = default;
     [SerializeField] private float interactionDistance = default;
@@ -91,9 +110,10 @@ public class FirstPersonController : MonoBehaviour
 
     [SerializeField] private Camera playerCamera;
     private CharacterController CharacCtrl;
+    //[SerializeField] private Enemy enemy;
 
     private Vector3 MoveDir;
-    private Vector2 CurrentInput;
+    public Vector2 CurrentInput;
 
     private float rotationX = 0;
 
@@ -106,6 +126,7 @@ public class FirstPersonController : MonoBehaviour
         playerCamera = GetComponentInChildren<Camera>();
         CharacCtrl = GetComponent<CharacterController>();
         defaultYPos = playerCamera.transform.localPosition.y;
+        damageScreen.color = new Color(damageScreen.color.r, damageScreen.color.g, damageScreen.color.b, 0);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -114,6 +135,11 @@ public class FirstPersonController : MonoBehaviour
     {
         MouseLook();
 
+        if (useOxygen)
+        {
+            HandleOxygen();
+        }
+            
         if (canInteract)
         {
             HandleInteractionCheck();
@@ -140,6 +166,17 @@ public class FirstPersonController : MonoBehaviour
 
             if (useStamina)
                 HandleStamina();
+        }
+
+        if (damageScreen.color.a > 0)
+        {
+            durationTimer += Time.deltaTime;
+            if (durationTimer > duration)
+            {
+                float regenTempAlpha = damageScreen.color.a;
+                regenTempAlpha -= Mathf.Clamp(Time.deltaTime * fadeSpeed, 0, 0.2f);
+                damageScreen.color = new Color(damageScreen.color.r, damageScreen.color.g, damageScreen.color.b, regenTempAlpha);
+            }
         }
     }
 
@@ -239,7 +276,47 @@ public class FirstPersonController : MonoBehaviour
             regeneratingStamina = StartCoroutine(RegenStamina());
         }
     }
-    
+
+    // ***** PLAYER OXYGEN *****
+    private void HandleOxygen()
+    {
+
+        if (Input.GetKeyDown(holdBreath))
+        {
+            FindObjectOfType<SoundManager>().Play("BreathIn");
+        }
+
+        if (IsBreathing && currentOxygen != 0)
+        {          
+            if (regeneratingOxygen != null)
+            {                
+                StopCoroutine(regeneratingOxygen);
+                regeneratingOxygen = null;
+            }
+
+            currentOxygen -= oxygenDrain * Time.deltaTime;
+
+            float tempAlpha = damageScreen.color.a;
+            tempAlpha += Mathf.Clamp(Time.deltaTime * fadeSpeed, 0, 0.5f);
+            damageScreen.color = new Color(damageScreen.color.r, damageScreen.color.g, damageScreen.color.b, tempAlpha);
+            durationTimer = 0;
+
+
+            CanMove = false;
+            //enemy.hearRadius = 0;
+
+
+            if (currentOxygen < 0)
+                currentOxygen = 0;
+            if (currentOxygen <= 0)
+                canBreath = false;
+        }
+        if (!IsBreathing && currentOxygen < maxOxygen && regeneratingOxygen == null)
+        {   
+            FindObjectOfType<SoundManager>().Play("BreathOut");
+            regeneratingOxygen = StartCoroutine(RegenOxygen());
+        }
+    }
     // ***** PLAYER FOOTSTEP SOUNDS *****
 
     private void HandleFootstep()
@@ -372,5 +449,34 @@ public class FirstPersonController : MonoBehaviour
         }
 
         regeneratingStamina = null;
+    }
+    private IEnumerator RegenOxygen()
+    {
+        yield return new WaitForSeconds(timeBeforeOxygenStart);
+        WaitForSeconds timeToWait = new WaitForSeconds(oxygenRegenTime);
+
+
+        while (currentOxygen < maxOxygen)
+        {
+            if (currentOxygen > 0)
+                canBreath = true;
+
+
+            currentOxygen += oxygenRegenValue;
+
+
+            //enemy.hearRadius = 3;
+            CanMove = true;
+
+
+            if (currentOxygen > maxOxygen)
+                currentOxygen = maxOxygen;
+
+
+            yield return timeToWait;
+        }
+
+
+        regeneratingOxygen = null;
     }
 }
