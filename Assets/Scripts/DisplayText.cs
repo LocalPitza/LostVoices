@@ -10,8 +10,7 @@ public class DisplayText : MonoBehaviour
     [SerializeField] public bool stopPlayerFromMoving = true;
 
     [SerializeField] private DialogueEntry[] customDialogue;
-    [SerializeField] private int loopCount = 1;
-
+    
 
     private void Start()
     {

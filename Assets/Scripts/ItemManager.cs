@@ -24,9 +24,7 @@ public class ItemManager : MonoBehaviour
             {
                 TurnOffObjects();
             }
-        }
-        else{
-            Debug.Log("No Detector");
+            
         }
 
     }

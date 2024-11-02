@@ -10,7 +10,7 @@ public class EventTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(!triggerActive)
         {
-                        ActivateEvent();
+            ActivateEvent();
         }
     }
     public void ActivateEvent()

@@ -6,6 +6,7 @@ public class RigidbodyTrigger : MonoBehaviour
 {
     public Rigidbody targetRigidbody; // The Rigidbody to activate
     public float activeDuration = 2f;  // Duration to keep the Rigidbody active
+    public AudioSource audioSource;
 
     private void Start()
     {
@@ -27,7 +28,8 @@ public class RigidbodyTrigger : MonoBehaviour
             // Activate the Rigidbody
             targetRigidbody.isKinematic = false; // Ensure it is not kinematic
             targetRigidbody.WakeUp(); // Wake up the Rigidbody if it was asleep
-
+            audioSource.Play();
+            
             // Start the coroutine to disable it after a delay
             StartCoroutine(DisableRigidbodyAfterDelay(activeDuration));
         }

@@ -12,10 +12,11 @@ public class TriggerFlicker : MonoBehaviour
     public bool stopAfterFlicker = true;      // Whether flicker should stop after a certain count
 
     private bool isFlickering = false;        // Track whether the light is currently flickering
+    public bool onlyTriggerOnce = true;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && onlyTriggerOnce)
         {
             // Play the initial sound only once
             if (initialSoundSource != null && !isFlickering)
@@ -28,6 +29,7 @@ public class TriggerFlicker : MonoBehaviour
             {
                 StartCoroutine(FlickerLight());
             }
+            onlyTriggerOnce = false;
         }
     }
 

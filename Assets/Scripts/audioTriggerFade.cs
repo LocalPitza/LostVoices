@@ -8,7 +8,7 @@ public class audioTriggerFade : MonoBehaviour
     public float fadeDuration = 1.5f;        // Duration for fading in and out
     public bool fadeOutOnce = false;         // If true, only fades out once on the first trigger
 
-    private bool hasFadedOut = false;        // Tracks if the audio has already faded out
+    [SerializeField] private bool hasFadedOut = false;        // Tracks if the audio has already faded out
     private Coroutine currentFadeCoroutine;  // Keeps track of the current coroutine
 
     private void OnTriggerEnter(Collider other)
@@ -29,13 +29,12 @@ public class audioTriggerFade : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && (!fadeOutOnce || !hasFadedOut))
+        if (other.CompareTag("Player") && (!fadeOutOnce || hasFadedOut))
         {
-            // Start fading in audio, stop any ongoing fade-out coroutine
             if (currentFadeCoroutine != null)
                 StopCoroutine(currentFadeCoroutine);
 
-            currentFadeCoroutine = StartCoroutine(FadeAudio(1f));  // Fade in
+            currentFadeCoroutine = StartCoroutine(FadeAudio(1f));
         }
     }
 
