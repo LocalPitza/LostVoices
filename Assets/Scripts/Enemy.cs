@@ -8,81 +8,113 @@ using UnityEngine.SceneManagement;
 public class Enemy : MonoBehaviour
 {
     private NavMeshAgent navMeshAgent;
-    [SerializeField] Transform target;
+    [SerializeField] private Transform player; // Reference to the player's transform
+    public Transform centerPoint; // Center point for random patrols
     public float hearRadius;
     public float hearRadiusRun;
     public float hearRadiusWalk;
-    public Transform centerPoint;
     public float range;
+    public float chaseDuration = 10f; // Duration for which the enemy will chase the player
     private float hearDistance;
-    private bool canHearPlayer;
+    private bool isChasing = false;
+    private Coroutine chaseTimerCoroutine;
 
     private void Start()
     {
-        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();     
-        canHearPlayer = true;
+        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
     }
-    
-    private void Update()
-    {  
-        hearDistance = Vector3.Distance(transform.position, target.transform.position);
 
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+    private void Update()
+    {
+        hearDistance = Vector3.Distance(transform.position, player.position);
+
+        // Patrol when not chasing
+        if (!isChasing && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
         {
-            Vector3 point;
-            if(RandomPoint(centerPoint.position, range, out point))
+            PatrolRandomly();
+        }
+
+        // Detect player noise and start or continue chasing if within range
+        if (PlayerMakingNoise())
+        {
+            StartChase();
+        }
+        else if (isChasing && !PlayerMakingNoise())
+        {
+            // Player is no longer heard, proceed to last known location and stop chasing after timer
+            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
             {
-                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
-                navMeshAgent.SetDestination(point);
+                isChasing = false; // Stop chasing if player is no longer heard and reached last known position
+                if (chaseTimerCoroutine != null)
+                {
+                    StopCoroutine(chaseTimerCoroutine);
+                    chaseTimerCoroutine = null;
+                }
             }
         }
-   
-        //Find a way to simplfy this and also, figure out how to insert a code that will play a chase music without it reapeating everytime the enemy keeps finding the player
-        //You can use a boolean to detect whether or not the player is heard and will only play the music once and then goes back off once the distance from the player is far enough 
-
-        if(canHearPlayer){
-            if (target.GetComponent<FirstPersonController>().CurrentInput.x > 0.1f && hearDistance < hearRadiusWalk || target.GetComponent<FirstPersonController>().CurrentInput.x < -0.1f && hearDistance < hearRadiusWalk)
-            {
-                playerHeard();
-                Debug.Log("I CAN HEAR YOU WALKING");      
-            }
-            else if (target.GetComponent<FirstPersonController>().CurrentInput.x > 3.5f && hearDistance < hearRadiusRun || target.GetComponent<FirstPersonController>().CurrentInput.x < -3.5f && hearDistance < hearRadiusRun)
-            {
-                playerHeard();
-                Debug.Log("I CAN HEAR YOU RUNNING");
-            }
-            else if (target.GetComponent<FirstPersonController>().CurrentInput.y > 0.1f && hearDistance < hearRadiusWalk || target.GetComponent<FirstPersonController>().CurrentInput.y < -0.1f && hearDistance < hearRadiusWalk)
-            {
-                playerHeard();
-                Debug.Log("I CAN HEAR YOU WALKING");
-            }
-            else if (target.GetComponent<FirstPersonController>().CurrentInput.y > 3.5f && hearDistance < hearRadiusRun || target.GetComponent<FirstPersonController>().CurrentInput.y < -3.5f && hearDistance < hearRadiusRun)
-            {
-                playerHeard();
-                Debug.Log("I CAN HEAR YOU RUNNING");
-            }
-            else if (hearDistance < hearRadius)
-            {
-                playerHeard();
-                Debug.Log("I CAN HEAR BREATHING");
-            }
-        }      
     }
 
-    private void OnTriggerEnter(Collider other)
+    private bool PlayerMakingNoise()
     {
-        if (other.gameObject.CompareTag("Player") && hearDistance < hearRadius)
+        var playerMovement = player.GetComponent<FirstPersonController>().CurrentInput;
+        
+        bool isWalking = Mathf.Abs(playerMovement.x) > 0.1f || Mathf.Abs(playerMovement.y) > 0.1f;
+        bool isRunning = Mathf.Abs(playerMovement.x) > 3.5f || Mathf.Abs(playerMovement.y) > 3.5f;
+
+        if (isRunning && hearDistance < hearRadiusRun)
         {
-            Debug.Log("I CAUGHT YOU");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
+            Debug.Log("I CAN HEAR YOU RUNNING");
+            return true;
+        }
+        if (isWalking && hearDistance < hearRadiusWalk)
+        {
+            Debug.Log("I CAN HEAR YOU WALKING");
+            return true;
+        }
+        if (hearDistance < hearRadius)
+        {
+            Debug.Log("I CAN HEAR BREATHING");
+            return true;
+        }
+
+        return false;
     }
 
-    bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    private void StartChase()
+    {
+        if (!isChasing)
+        {
+            isChasing = true;
+            if (chaseTimerCoroutine != null)
+            {
+                StopCoroutine(chaseTimerCoroutine);
+            }
+            chaseTimerCoroutine = StartCoroutine(StopChaseAfterTime());
+        }
+
+        navMeshAgent.SetDestination(player.position); // Continuously update to player’s position
+    }
+
+    private IEnumerator StopChaseAfterTime()
+    {
+        yield return new WaitForSeconds(chaseDuration);
+        isChasing = false;
+    }
+
+    private void PatrolRandomly()
+    {
+        Vector3 point;
+        if (RandomPoint(centerPoint.position, range, out point))
+        {
+            navMeshAgent.SetDestination(point);
+        }
+    }
+
+    private bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
         Vector3 randomPoint = center + Random.insideUnitSphere * range;
         NavMeshHit hit;
-        if(NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
         {
             result = hit.position;
             return true;
@@ -92,13 +124,17 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    private void playerHeard()
+    private void OnTriggerEnter(Collider other)
     {
-        //change of plans, enemy will hear the player once and the enemy will jsut charge at the player anywhere they are once they've been heard. 
-        //We need to make it so that the enemy makes louder sounds to signal the position of the enemy to the player.
-
-        navMeshAgent.SetDestination(target.position);
-        //canHearPlayer = false;
+        if (other.gameObject.CompareTag("Player") && hearDistance < hearRadius)
+        {
+            TriggerPlayerDeath();
+        }
     }
 
+    private void TriggerPlayerDeath()
+    {
+        Debug.Log("You have been killed!");
+        // Display UI message instead of reloading scene
+    }
 }

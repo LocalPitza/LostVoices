@@ -11,6 +11,7 @@ public class SoundManager : MonoBehaviour
    
     void Awake()
     {
+
         if(instance == null)
             instance = this;
         else
@@ -28,8 +29,7 @@ public class SoundManager : MonoBehaviour
 
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
-            s.source.loop = s.loop;
-           
+            s.source.loop = s.loop;       
         }
     }
 

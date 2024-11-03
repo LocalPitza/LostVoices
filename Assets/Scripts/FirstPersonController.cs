@@ -13,6 +13,7 @@ public class FirstPersonController : MonoBehaviour
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !inCrouchAnim && CharacCtrl.isGrounded;
 
     [Header("Function Options")]
+    public bool canMouseLook = true;
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
@@ -110,7 +111,7 @@ public class FirstPersonController : MonoBehaviour
 
     [SerializeField] private Camera playerCamera;
     private CharacterController CharacCtrl;
-    //[SerializeField] private Enemy enemy;
+    [SerializeField] private Enemy enemy;
 
     private Vector3 MoveDir;
     public Vector2 CurrentInput;
@@ -133,7 +134,11 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
-        MouseLook();
+        if(canMouseLook)
+        {
+            MouseLook();
+        }
+
 
         if (useOxygen)
         {
@@ -303,7 +308,8 @@ public class FirstPersonController : MonoBehaviour
 
 
             CanMove = false;
-            //enemy.hearRadius = 0;
+            enemy.hearRadius = 0;
+            enemy.chaseDuration = 2;
 
 
             if (currentOxygen < 0)
@@ -465,7 +471,8 @@ public class FirstPersonController : MonoBehaviour
             currentOxygen += oxygenRegenValue;
 
 
-            //enemy.hearRadius = 3;
+            enemy.hearRadius = 3;
+            enemy.chaseDuration = 10;
             CanMove = true;
 
 

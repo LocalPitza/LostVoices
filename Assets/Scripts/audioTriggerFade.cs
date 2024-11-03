@@ -34,7 +34,7 @@ public class audioTriggerFade : MonoBehaviour
             if (currentFadeCoroutine != null)
                 StopCoroutine(currentFadeCoroutine);
 
-            currentFadeCoroutine = StartCoroutine(FadeAudio(1f));
+            currentFadeCoroutine = StartCoroutine(FadeAudio(0.7f));
         }
     }
 
