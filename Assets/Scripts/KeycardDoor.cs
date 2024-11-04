@@ -103,28 +103,24 @@ public class KeycardDoor : Interactable
                     particle.gameObject.SetActive(true);
                     particle.Play();
                 }
+                StartCoroutine(FadeOutParticlesAfterDelay());
             }
             else
             {
-                // Gradually fade out particle effects if door is closed
                 foreach (var particle in doorParticles)
                 {
                     StartCoroutine(FadeOutAndDisableParticle(particle));
                 }
             }
-
-            // Mark door as used if only usable once
             if (useOnce) hasBeenUsed = true;
         }
     }
 
     private IEnumerator FadeOutAndDisableParticle(ParticleSystem particle)
     {
-        // Retrieve the emission module and its initial rate
         var emission = particle.emission;
         float initialRate = emission.rateOverTime.constant;
-        
-        // Gradually reduce the emission rate over the fade-out duration
+
         for (float t = 0; t < fadeOutDuration; t += Time.deltaTime)
         {
             float rate = Mathf.Lerp(initialRate, 0, t / fadeOutDuration);
@@ -132,9 +128,17 @@ public class KeycardDoor : Interactable
             yield return null;
         }
 
-        // Ensure particle system is stopped and then disable it
         emission.rateOverTime = 0;
         particle.Stop();
         particle.gameObject.SetActive(false);
+    }
+    private IEnumerator FadeOutParticlesAfterDelay()
+    {
+        yield return new WaitForSeconds(1.5f); // Adjust this delay as needed
+
+        foreach (var particle in doorParticles)
+        {
+            StartCoroutine(FadeOutAndDisableParticle(particle));
+        }
     }
 }

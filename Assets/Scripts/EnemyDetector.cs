@@ -12,7 +12,7 @@ public class EnemyDetector : MonoBehaviour
     public Image westIndicator;
 
     public Transform player;
-    private Transform enemy;
+    [SerializeField] private Transform enemy;
 
     public float detectionRange = 10f;
     public float fadeDurationAtMaxDistance = 2f; // Duration for fade at maximum distance (slow)
@@ -26,15 +26,8 @@ public class EnemyDetector : MonoBehaviour
     void Start()
     {
         // Find the enemy automatically by tag
-        GameObject enemyObject = GameObject.FindGameObjectWithTag("Enemy");
-        if (enemyObject != null)
-        {
-            enemy = enemyObject.transform;
-        }
-        else
-        {
-            Debug.LogWarning("No enemy found with the tag 'Enemy'.");
-        }
+        enemy = GameObject.FindGameObjectWithTag("Enemy").transform;
+        
 
         // Locate the SoundManager
         soundManager = FindObjectOfType<SoundManager>();

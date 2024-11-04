@@ -48,6 +48,6 @@ public class MainMenu : MonoBehaviour
 
     public void exitGame()
     {
-        Debug.Log("Terminated Game");
+        Application.Quit();
     }
 }

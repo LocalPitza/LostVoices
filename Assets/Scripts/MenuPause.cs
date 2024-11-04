@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class MenuPause : MonoBehaviour
 {
     private GameManager gameManager;
     public GameObject pauseMenu;
-
-    public Button returnButton;
-    public Button soundButton;
-    public Button graphicsButton;
-    public Button mainMenuButton;
+    public CanvasGroup canvasFade;
+    public CanvasGroup secondCanvasFade;
+    public AudioSource backgroundMusic1;
+    public AudioSource backgroundMusic2;
+    public float fadeDuration = 1.5f;
+    public float waitTimeAfterFade = 1.0f;
 
     void Start()
     {
@@ -31,18 +34,39 @@ public class MenuPause : MonoBehaviour
         }
     }
 
-    private void OpenSoundSettings()
+    public void OpenSoundSettings()
     {
         Debug.Log("Opening Sound Settings");
     }
 
-    private void OpenGraphicsSettings()
+    public void OpenGraphicsSettings()
     {
         Debug.Log("Opening Graphics Settings");
     }
 
-    private void ReturnToMainMenu()
+    public void ReturnToMainMenu()
     {
         Debug.Log("Returning to Main Menu");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+        private IEnumerator FadeAndSwitchScene()
+    {
+
+        secondCanvasFade.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
+        canvasFade.DOFade(1, fadeDuration).SetEase(Ease.InOutQuad);
+
+        backgroundMusic1.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
+        backgroundMusic2.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);
+
+        yield return new WaitForSeconds(fadeDuration);
+
+        yield return new WaitForSeconds(waitTimeAfterFade);
+
+        SceneManager.LoadScene("MainMenu");
     }
 }
