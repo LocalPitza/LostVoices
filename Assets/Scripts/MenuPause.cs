@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 public class MenuPause : MonoBehaviour
 {
     private GameManager gameManager;
-    public GameObject pauseMenu;
     public CanvasGroup canvasFade;
     public CanvasGroup secondCanvasFade;
     public AudioSource backgroundMusic1;
@@ -46,8 +45,9 @@ public class MenuPause : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        //FindObjectOfType<GameManager>().Resume();
         Debug.Log("Returning to Main Menu");
-        StartCoroutine(FadeAndSwitchScene());
+        //StartCoroutine(FadeAndSwitchScene());
     }
 
     public void ExitGame()
