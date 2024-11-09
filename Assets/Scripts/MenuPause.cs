@@ -47,6 +47,7 @@ public class MenuPause : MonoBehaviour
     public void ReturnToMainMenu()
     {
         Debug.Log("Returning to Main Menu");
+        StartCoroutine(FadeAndSwitchScene());
     }
 
     public void ExitGame()
@@ -54,7 +55,7 @@ public class MenuPause : MonoBehaviour
         Application.Quit();
     }
 
-        private IEnumerator FadeAndSwitchScene()
+    private IEnumerator FadeAndSwitchScene()
     {
 
         secondCanvasFade.DOFade(0, fadeDuration).SetEase(Ease.InOutQuad);

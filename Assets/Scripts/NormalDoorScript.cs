@@ -8,9 +8,11 @@ public class NormalDoorScript : Interactable
 {
     public GameObject Door;
     public bool isOpen;
+    public bool openOnce;
+    private bool usedOnce;
     public bool moveSnap;
     public float moveSpeed;
-    private string _text = "Interact";
+    [SerializeField] private string _text = "Interact";
     public AudioSource _audio;
     [SerializeField] private Vector3 start;
     [SerializeField] private Vector3 end;
@@ -37,12 +39,14 @@ public class NormalDoorScript : Interactable
 
     public override void OnInteract()
     {
+
+        if (openOnce && usedOnce) return;
+
         if (!isOpen)
         {
             _audio.Play();
             Door.transform.DOMove(end, moveSpeed, moveSnap);
             isOpen = true;
-            _text = "Interact";
 
             foreach (var effect in openDoorEffects)
             {
@@ -58,7 +62,6 @@ public class NormalDoorScript : Interactable
             _audio.Play();
             Door.transform.DOMove(start, moveSpeed, moveSnap);
             isOpen = false;
-            _text = "Interact";
 
             foreach (var effect in openDoorEffects)
             {
@@ -68,6 +71,11 @@ public class NormalDoorScript : Interactable
                     StartCoroutine(StopEffectAfterDuration(effect));
                 }
             }
+        }
+
+        if (openOnce)
+        {
+            usedOnce = true;
         }
     }
 

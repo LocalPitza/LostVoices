@@ -62,7 +62,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float timeBeforeStart = 5;
     [SerializeField] private float staminaRegenValue = 2;
     [SerializeField] private float staminaRegenTime = 0.1f;
-    private float currentStamina;
+    [SerializeField] private float currentStamina;
     private Coroutine regeneratingStamina;
 
     [Header("HoldBreath")]
@@ -179,7 +179,7 @@ public class FirstPersonController : MonoBehaviour
             if (durationTimer > duration)
             {
                 float regenTempAlpha = damageScreen.color.a;
-                regenTempAlpha -= Mathf.Clamp(Time.deltaTime * fadeSpeed, 0, 0.2f);
+                regenTempAlpha -= Mathf.Clamp(Time.deltaTime * fadeSpeed, 0, 0.5f);
                 damageScreen.color = new Color(damageScreen.color.r, damageScreen.color.g, damageScreen.color.b, regenTempAlpha);
             }
         }

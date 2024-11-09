@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
     public AudioSource _audio;
     void Start()
     {
-        DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(1500, 500);
+        DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(90000, 500);
     }
 
     void Update()
     {
-        // Check for the Escape key press
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
@@ -39,11 +38,11 @@ public class GameManager : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-        Time.timeScale = 1f; // Resume the game time
-        FirstPersonController.instance.CanMove = true; // Allow player movement
+        Time.timeScale = 1f;
+        FirstPersonController.instance.CanMove = true;
         FirstPersonController.instance.canMouseLook = true;
-        Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-        Cursor.visible = false; // Hide the cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         _audio.UnPause();
         
     }
@@ -57,11 +56,11 @@ public class GameManager : MonoBehaviour
                 gameObject.SetActive(true);
             }
         }
-        Time.timeScale = 0f; // Freeze the game time
-        FirstPersonController.instance.CanMove = false; // Disable player movement
+        Time.timeScale = 0f;
+        FirstPersonController.instance.CanMove = false;
         FirstPersonController.instance.canMouseLook = false;
-        Cursor.lockState = CursorLockMode.None; // Unlock the cursor
-        Cursor.visible = true; // Show the cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         _audio.Pause();
         
     }
