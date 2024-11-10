@@ -12,7 +12,6 @@ public class EnemyDetector : MonoBehaviour
     public Image westIndicator;
 
     public Transform player;
-    [SerializeField] private Transform enemy;
 
     public float detectionRange = 10f;
     public float fadeDurationAtMaxDistance = 2f; // Duration for fade at maximum distance (slow)
@@ -23,11 +22,16 @@ public class EnemyDetector : MonoBehaviour
     private Image currentPrimaryIndicator; // Primary indicator for main direction
     private bool isFadingPrimary = false; // Track primary fading state
 
+    private List<Transform> enemies = new List<Transform>();
+
     void Start()
     {
-        // Find the enemy automatically by tag
-        enemy = GameObject.FindGameObjectWithTag("Enemy").transform;
-        
+        // Find all enemies automatically by tag
+        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemyObj in enemyObjects)
+        {
+            enemies.Add(enemyObj.transform);
+        }
 
         // Locate the SoundManager
         soundManager = FindObjectOfType<SoundManager>();
@@ -38,13 +42,15 @@ public class EnemyDetector : MonoBehaviour
 
     void Update()
     {
-        if (enemy == null) return;
+        if (enemies.Count == 0) return;
 
-        float distanceToEnemy = Vector3.Distance(player.position, enemy.position);
+        // Find the closest enemy within detection range
+        Transform closestEnemy = GetClosestEnemy();
 
-        if (distanceToEnemy <= detectionRange)
+        if (closestEnemy != null)
         {
-            UpdateIndicatorDirection(distanceToEnemy);
+            float distanceToEnemy = Vector3.Distance(player.position, closestEnemy.position);
+            UpdateIndicatorDirection(closestEnemy, distanceToEnemy);
         }
         else
         {
@@ -52,7 +58,28 @@ public class EnemyDetector : MonoBehaviour
         }
     }
 
-    void UpdateIndicatorDirection(float distanceToEnemy)
+    Transform GetClosestEnemy()
+    {
+        Transform closestEnemy = null;
+        float closestDistance = detectionRange + 1f; // Start with a distance greater than the detection range
+
+        foreach (Transform enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            float distance = Vector3.Distance(player.position, enemy.position);
+
+            if (distance < closestDistance && distance <= detectionRange)
+            {
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+
+        return closestEnemy;
+    }
+
+    void UpdateIndicatorDirection(Transform enemy, float distanceToEnemy)
     {
         if (enemy == null) return;
 
@@ -68,19 +95,19 @@ public class EnemyDetector : MonoBehaviour
         float leftAngleToEnemy = Vector3.Angle(-player.right, directionToEnemy);
 
         // Determine primary direction (N, S, E, W)
-        if (angleToEnemy < 45f)  // Forward (North)
+        if (angleToEnemy < 45f) // Forward (North)
         {
             primaryIndicator = northIndicator;
         }
-        else if (backwardAngleToEnemy < 45f)  // Backward (South)
+        else if (backwardAngleToEnemy < 45f) // Backward (South)
         {
             primaryIndicator = southIndicator;
         }
-        else if (rightAngleToEnemy < 45f)  // Right (East)
+        else if (rightAngleToEnemy < 45f) // Right (East)
         {
             primaryIndicator = eastIndicator;
         }
-        else if (leftAngleToEnemy < 45f)  // Left (West)
+        else if (leftAngleToEnemy < 45f) // Left (West)
         {
             primaryIndicator = westIndicator;
         }
@@ -99,19 +126,12 @@ public class EnemyDetector : MonoBehaviour
         {
             StopFadingPrimary(); // If no primary indicator, stop fading
         }
-
-        // Debugging output
-        Debug.Log($"Primary Indicator: {currentPrimaryIndicator}");
     }
 
     void StartFading(Image indicator, float distanceToEnemy)
     {
         // Calculate fade duration based on distance to the enemy
-        float fadeDuration = fadeDurationAtMaxDistance; // Start with max duration
-        if (distanceToEnemy < detectionRange)
-        {
-            fadeDuration = Mathf.Lerp(fadeDurationAtMaxDistance, fadeDurationAtMinDistance, 1 - (distanceToEnemy / detectionRange));
-        }
+        float fadeDuration = Mathf.Lerp(fadeDurationAtMaxDistance, fadeDurationAtMinDistance, 1 - (distanceToEnemy / detectionRange));
 
         // If the indicator is already fading, stop its current sequence
         if (isFadingPrimary && currentPrimaryIndicator == indicator)
@@ -172,6 +192,7 @@ public class EnemyDetector : MonoBehaviour
 
     void SetTransparency(Image indicator, float alpha)
     {
+        if (indicator == null) return;
         Color color = indicator.color;
         color.a = alpha;
         indicator.color = color;

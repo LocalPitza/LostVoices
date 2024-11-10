@@ -45,16 +45,14 @@ public class MenuPause : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        //FindObjectOfType<GameManager>().Resume();
         Debug.Log("Returning to Main Menu");
-        //StartCoroutine(FadeAndSwitchScene());
     }
 
     public void ExitGame()
     {
         Application.Quit();
     }
-
+    /*
     private IEnumerator FadeAndSwitchScene()
     {
 
@@ -70,4 +68,5 @@ public class MenuPause : MonoBehaviour
 
         SceneManager.LoadScene("MainMenu");
     }
+    */
 }

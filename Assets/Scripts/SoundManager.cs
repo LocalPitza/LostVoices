@@ -35,7 +35,7 @@ public class SoundManager : MonoBehaviour
             if (s.outputGroup != null)
                 s.source.outputAudioMixerGroup = s.outputGroup;
             else
-                s.source.outputAudioMixerGroup = audioMixer.FindMatchingGroups("Master")[0]; 
+                s.source.outputAudioMixerGroup = audioMixer.FindMatchingGroups("Master")[1]; 
         }
     }
 

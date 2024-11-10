@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     public GameObject[] pauseMenuObjects;
     public AudioSource _audio;
+    public AudioMixer audioMixer;
     void Start()
     {
         DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(90000, 500);
@@ -16,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        /* Pause Menu */
+        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
@@ -39,6 +43,7 @@ public class GameManager : MonoBehaviour
             }
         }
         Time.timeScale = 1f;
+        audioMixer.SetFloat("Audio",0f);
         FirstPersonController.instance.CanMove = true;
         FirstPersonController.instance.canMouseLook = true;
         Cursor.lockState = CursorLockMode.Locked;
@@ -57,6 +62,7 @@ public class GameManager : MonoBehaviour
             }
         }
         Time.timeScale = 0f;
+        audioMixer.SetFloat("Audio",-80f);
         FirstPersonController.instance.CanMove = false;
         FirstPersonController.instance.canMouseLook = false;
         Cursor.lockState = CursorLockMode.None;

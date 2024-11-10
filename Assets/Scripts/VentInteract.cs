@@ -6,7 +6,7 @@ using DG.Tweening;
 public class VentInteract : Interactable
 {
     public Vector3 teleportTarget;
-    public float fadeDuration = 0.5f;  // Customizable fade duration for vent interactions
+    public float fadeDuration = 0.5f;
 
     [SerializeField] private Transform player;
     private bool isTeleporting = false;
@@ -48,11 +48,9 @@ public class VentInteract : Interactable
     {
         isTeleporting = true;
 
-        // Disable player movement and set FadeManager duration for the fade transition
         FirstPersonController.instance.CanMove = false;
         FadeManager.Instance.SetFadeDuration(fadeDuration);
 
-        // Start fade-in, teleport, and then fade-out sequence
         FadeManager.Instance.FadeIn();
         FadeManager.Instance.StartCoroutine(TeleportAfterFade());
     }

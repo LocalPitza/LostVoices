@@ -149,7 +149,8 @@ AudioSource:
   m_GameObject: {fileID: 291046812}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 9153513040425327516, guid: f1debccf9d243fe4d89a864564d0efb1,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 873bd2a3b0228a545828fbdadcc37363, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
@@ -1295,84 +1296,129 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: DeepCharacterSpeak
     clips: {fileID: 8300000, guid: 5586d7d7dd238df43b8270e1fb50441a, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: CharacterSpeak
     clips: {fileID: 8300000, guid: 3ff471e3a4cf6954ba425b4b0e9d0544, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Speak1
     clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Speak2
     clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Speak3
     clips: {fileID: 8300000, guid: beb3512f71077e54aa2cc93ebc1769a5, type: 3}
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Speak4
     clips: {fileID: 8300000, guid: 9838d0cfabe659b4ba90924a7f10138a, type: 3}
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Speak5
     clips: {fileID: 8300000, guid: 846052df10e1cdb40adb9876e1dee1fa, type: 3}
     volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Vent
     clips: {fileID: 8300000, guid: 8a1dc11e5504cd64ab90618429747530, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: LockerEnter
     clips: {fileID: 8300000, guid: c7f39e501e53cf64d88b938954854c7c, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: LockerExit
     clips: {fileID: 8300000, guid: c7f39e501e53cf64d88b938954854c7c, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: Detect
     clips: {fileID: 8300000, guid: 94a9111c215bd2d408d9dd148b47cf14, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: BreathIn
     clips: {fileID: 8300000, guid: a9e9179b4a771544dab4301abacc7ec9, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
   - name: BreathOut
     clips: {fileID: 8300000, guid: 49d798fa6a5430349a4aa4e09d88db6e, type: 3}
     volume: 0.6
     pitch: 1
     loop: 0
     source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
+  - name: pickup
+    clips: {fileID: 8300000, guid: f9190f45c91b1c640b1f4eb7b0f887b3, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
+  - name: EnterHub
+    clips: {fileID: 8300000, guid: 378c6afa0aa73d94abc53254acd7760e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    outputGroup: {fileID: -9023912292067818359, guid: f1debccf9d243fe4d89a864564d0efb1,
+      type: 2}
+  audioMixer: {fileID: 0}
 --- !u!4 &1150299090
 Transform:
   m_ObjectHideFlags: 0
@@ -1520,7 +1566,8 @@ AudioSource:
   m_GameObject: {fileID: 1236804728}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 9153513040425327516, guid: f1debccf9d243fe4d89a864564d0efb1,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 4a5fa9a202c1cc94cbf4efa5dbd30f53, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.3
@@ -2729,7 +2776,8 @@ AudioSource:
   m_GameObject: {fileID: 2017858137}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 9153513040425327516, guid: f1debccf9d243fe4d89a864564d0efb1,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
