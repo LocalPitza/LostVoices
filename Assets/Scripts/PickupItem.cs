@@ -7,6 +7,7 @@ public class PickupItem : Interactable
     [SerializeField] private string itemID;
     [SerializeField] private string interactText = "Press F to Examine";
     public bool isMandatoryPickup = false;
+    public bool canBePickedUp;
 
     public string ItemID => itemID;
 

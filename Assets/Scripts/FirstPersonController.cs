@@ -465,7 +465,7 @@ public class FirstPersonController : MonoBehaviour
     {
         PickupItem pickupScript = currentExaminedItem.GetComponent<PickupItem>();
         // Pick up item
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && pickupScript.canBePickedUp)
         {
             PickUpExaminedItem();
         }
