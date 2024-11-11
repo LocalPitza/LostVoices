@@ -4,6 +4,16 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
+
+//Current Issues: Rotation of object examined is not centered
+
+
+
+
+
+
+
+
 public class FirstPersonController : MonoBehaviour
 {
     public bool CanMove { get; set; } = true;
@@ -30,6 +40,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private KeyCode crouchKey = KeyCode.C;
     [SerializeField] private KeyCode interactKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode holdBreath = KeyCode.E;
+    [SerializeField] public KeyCode returnKey = KeyCode.R;
 
     [Header("Movement Parameters")]
     [SerializeField] private float WalkSpeed = 3.0f;
@@ -109,6 +120,21 @@ public class FirstPersonController : MonoBehaviour
     private Interactable currentInteractable;
     private Interactable previousInteractable;
 
+    [Header("Examine Settings")]
+    [SerializeField] private Transform examinePoint;
+    [SerializeField] private float rotationSpeed = 100f;
+
+    [SerializeField] GameObject examineText;
+
+    private GameObject currentExaminedItem;
+    private bool isExamining = false;
+    private bool isMandatoryPickup = false;
+    private Vector3 originalItemPosition;
+    private Quaternion originalItemRotation;
+    private Transform originalItemParent;
+
+    [Header("Additional Settings")]
+
     [SerializeField] private Camera playerCamera;
     private CharacterController CharacCtrl;
     [SerializeField] private Enemy enemy;
@@ -150,6 +176,13 @@ public class FirstPersonController : MonoBehaviour
             HandleInteractionCheck();
             HandleInteractionInput();
         }
+
+        if (isExamining)
+        {
+            RotateExaminedItem();
+            HandleExamineInput();
+        }
+
 
         if (CanMove)
         {
@@ -362,10 +395,10 @@ public class FirstPersonController : MonoBehaviour
     private void HandleInteractionCheck()
     {
         previousInteractable = currentInteractable;
-        
-        if(Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),out RaycastHit hit, interactionDistance))
+
+        if (Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit, interactionDistance, interactionLayer))
         {
-            if(hit.collider.gameObject.layer == 6 && (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
+            if (hit.collider.gameObject.layer == 6 && (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
                 hit.collider.TryGetComponent(out currentInteractable);
 
@@ -377,7 +410,7 @@ public class FirstPersonController : MonoBehaviour
         {
             currentInteractable = null;
         }
-        
+
         if (previousInteractable != currentInteractable)
         {
             if (previousInteractable != null)
@@ -389,12 +422,116 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleInteractionInput()
     {
-        if (Input.GetKeyDown(interactKey) && currentInteractable != null && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit, interactionDistance, interactionLayer))
+        if (Input.GetKeyDown(interactKey) && currentInteractable != null)
         {
-            currentInteractable.OnInteract();
+            if (currentInteractable is PickupItem pickupItem)
+            {
+                StartExamination(pickupItem.gameObject);
+            }
+            else
+            {
+                currentInteractable.OnInteract();
+            }
         }
     }
 
+    private void StartExamination(GameObject item)
+    {
+        if (isExamining) return;
+
+        isExamining = true;
+        currentExaminedItem = item;
+        CanMove = false;
+        canMouseLook = false;
+
+        originalItemParent = item.transform.parent;
+        originalItemPosition = item.transform.position;
+        originalItemRotation = item.transform.rotation;
+
+        item.transform.SetParent(examinePoint);
+        item.transform.localPosition = Vector3.zero;
+        item.transform.localRotation = Quaternion.identity;
+
+        Collider itemCollider = item.GetComponent<Collider>();
+        if (itemCollider != null)
+        {
+            itemCollider.enabled = false;
+        }
+
+        examineText.SetActive(true);
+    }
+
+    private void HandleExamineInput()
+    {
+        PickupItem pickupScript = currentExaminedItem.GetComponent<PickupItem>();
+        // Pick up item
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            PickUpExaminedItem();
+        }
+
+        // Return item if not important
+        if (!pickupScript.isMandatoryPickup && Input.GetKeyDown(returnKey))
+        {
+            ReturnExaminedItem();
+        }
+    }
+    private void PickUpExaminedItem()
+    {
+        if (currentExaminedItem != null)
+        {
+            PlayerInventory inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            PickupItem pickupScript = currentExaminedItem.GetComponent<PickupItem>();
+
+            if (pickupScript != null && inventory != null)
+            {
+                inventory.AddItem(pickupScript.ItemID);
+                FindObjectOfType<SoundManager>().Play("pickup");
+                Destroy(currentExaminedItem);
+                Debug.Log($"Picked up item: {pickupScript.ItemID}");
+            }
+        }
+        
+        EndExamination();
+    }
+
+    private void RotateExaminedItem()
+    {
+        if (currentExaminedItem == null) return;
+
+        float rotationX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+        float rotationY = Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+        Vector3 rotation = new Vector3(rotationY, -rotationX, 0);
+        currentExaminedItem.transform.Rotate(rotation, Space.World);
+    }
+
+    private void ReturnExaminedItem()
+    {
+        if (currentExaminedItem != null)
+        {
+            currentExaminedItem.transform.SetParent(originalItemParent);
+            currentExaminedItem.transform.position = originalItemPosition;
+            currentExaminedItem.transform.rotation = originalItemRotation;
+
+            // turn on item collider here.
+            Collider itemCollider = currentExaminedItem.GetComponent<Collider>();
+            if (itemCollider != null)
+            {
+                itemCollider.enabled = true;
+            }
+        }
+        EndExamination();
+    }
+
+    private void EndExamination()
+    {
+        isExamining = false;
+        CanMove = true;
+        canMouseLook = true;
+        currentExaminedItem = null;
+        examineText.SetActive(false);
+    }
 
     private void ApplyMovement()
     {
