@@ -14,7 +14,11 @@ public class MenuPause : MonoBehaviour
     public AudioSource backgroundMusic2;
     public float fadeDuration = 1.5f;
     public float waitTimeAfterFade = 1.0f;
-
+    public GameObject settingsPanel;
+    bool settingPanelOpened;
+    public GameObject audioPanel;
+    public GameObject videoPanel;
+    public GameObject controlPanel;
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -27,31 +31,72 @@ public class MenuPause : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingPanelOpened)
         {
             OnReturnButtonClicked();
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if(!settingPanelOpened)
+            {
+                settingsPanel.SetActive(false);
+            }
+            else
+            {
+                audioPanel.SetActive(false);
+                videoPanel.SetActive(false);
+                controlPanel.SetActive(false);
+                settingPanelOpened = false;
+            }
+        }
     }
 
-    public void OpenSoundSettings()
+    public void OpenSettings()
     {
-        Debug.Log("Opening Sound Settings");
+        settingsPanel.SetActive(true);
     }
 
-    public void OpenGraphicsSettings()
+    public void LoadSave()
     {
-        Debug.Log("Opening Graphics Settings");
+        Debug.Log("Loading Last Save");
     }
 
     public void ReturnToMainMenu()
     {
-        Debug.Log("Returning to Main Menu");
+        Debug.Log("Are you sure?");
     }
 
     public void ExitGame()
     {
+        Debug.Log("Exiting Game");
         Application.Quit();
     }
+
+    public void OpenAudio()
+    {
+        videoPanel.SetActive(false);
+        controlPanel.SetActive(false);
+        audioPanel.SetActive(true);
+        settingPanelOpened = true;
+    }
+
+    public void OpenVideo()
+    {
+        audioPanel.SetActive(false);
+        controlPanel.SetActive(false);
+        videoPanel.SetActive(true);
+        settingPanelOpened = true;
+    }
+
+    public void OpenControls()
+    {
+        audioPanel.SetActive(false);
+        videoPanel.SetActive(false);
+        controlPanel.SetActive(true);
+        settingPanelOpened = true;
+    }
+
     /*
     private IEnumerator FadeAndSwitchScene()
     {
