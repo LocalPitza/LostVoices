@@ -5,14 +5,6 @@ using DG.Tweening;
 using UnityEngine.UI;
 
 
-//Current Issues: Rotation of object examined is not centered
-
-
-
-
-
-
-
 
 public class FirstPersonController : MonoBehaviour
 {
