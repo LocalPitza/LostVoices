@@ -8,6 +8,7 @@ public class ComputerInteract : Interactable
 
     public List<GameObject> turnOn = new List<GameObject>();
     public List<GameObject> turnOff = new List<GameObject>();
+    bool alreadyOn = false;
 
     public override void OnFocus()
     {
@@ -16,19 +17,23 @@ public class ComputerInteract : Interactable
 
     public override void OnInteract()
     {
-        foreach (var gameObject in turnOn)
+        if(!alreadyOn)
         {
-            if (gameObject != null)
+            foreach (var gameObject in turnOn)
             {
-                gameObject.SetActive(true);
+                if (gameObject != null)
+                {
+                    gameObject.SetActive(true);
+                }
             }
-        }
-        foreach (var gameObject in turnOff)
-        {
-            if (gameObject != null)
+            foreach (var gameObject in turnOff)
             {
-                gameObject.SetActive(false);
+                if (gameObject != null)
+                {
+                    gameObject.SetActive(false);
+                }
             }
+            alreadyOn = true;
         }
     }
 

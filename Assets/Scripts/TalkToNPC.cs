@@ -15,7 +15,7 @@ public class TalkToNpc : Interactable
     public override void OnFocus()
     {
         if(!hasTalkedToNPC){
-            UIInteract.Instance.ShowText("Talk");
+            UIInteract.Instance.ShowText(_text);
         }
         else{
             UIInteract.Instance.ShowText(_text);
