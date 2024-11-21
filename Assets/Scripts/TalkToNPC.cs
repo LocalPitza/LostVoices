@@ -8,6 +8,7 @@ public class TalkToNpc : Interactable
     [SerializeField] private string _text = "Talk";
     [SerializeField] private DisplayText displayText;
     [SerializeField] private bool hasTalkedToNPC;
+    [SerializeField] private bool talkMove = true;
     private void Start()
     {
         displayText = FindObjectOfType<DisplayText>();
@@ -25,14 +26,27 @@ public class TalkToNpc : Interactable
 
     public override void OnInteract()
     {
-        displayText.stopPlayerFromMoving = true;
-        displayText.SetDialogue(dialogueEntries);
-        displayText.playText();
-        hasTalkedToNPC = true;
+        if(!talkMove)
+        {
+            displayText.stopPlayerFromMoving = false;
+            displayNPCText();
+        }
+        else
+        {
+            displayText.stopPlayerFromMoving = true;
+            displayNPCText();
+        }
     }
 
     public override void OnLoseFocus()
     {
         UIInteract.Instance.HideText();
+    }
+
+    private void displayNPCText()
+    {
+        displayText.SetDialogue(dialogueEntries);
+        displayText.playText();
+        hasTalkedToNPC = true;
     }
 }
