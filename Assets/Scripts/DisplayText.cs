@@ -104,6 +104,15 @@ public class DisplayText : MonoBehaviour
                 soundManager.Play($"Speak{randomIndex}");
             }
         }
+        else if (Characters[Characters.Length - 1] == "P")
+        {
+            if (currentIndex % 6 == 0) soundManager.Play("LightCharacterSpeak");
+            if (currentIndex % 3 == 0)
+            {
+                int randomIndex = Random.Range(1, 3);
+                soundManager.Play($"Speak{randomIndex}");
+            }
+        }
     }
 
     public void clearDialogue()
